@@ -1,0 +1,22 @@
+{
+    "name": "thisaislan.control-panel",
+    "version": "1.0.0",
+    "displayName": "Control panel",
+    "description": "A powerful Unity Editor tool for creating, organizing, and managing custom control panel using ScriptableObjects across multiple tabs with intuitive drag-and-drop functionality.",
+    "documentationUrl": "https://github.com/thisaislan/control-panel",
+    "changelogUrl": "https://github.com/thisaislan/control-panel/main/CHANGELOG.md",
+    "licensesUrl": "https://github.com/thisaislan/control-panel/blob/main/LICENSE.md",
+    "keywords": [
+        "Tools",
+        "Scriptables",
+        "Editor",
+        "Control Panel"
+    ],
+    "category": "Tools",
+    "dependencies": {
+    },
+    "author": {
+    "name": "thisaislan",
+    "url": "https://github.com/thisaislan"
+  }
+}
