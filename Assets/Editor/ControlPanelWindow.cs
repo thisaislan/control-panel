@@ -289,6 +289,7 @@ namespace Thisaislan.ControlPanel.Editor
             GUILayout.EndVertical();
 
             GUILayout.BeginVertical();
+            EditorGUILayout.Space();
             DrawRightColumn();
             DrawPathSelector();
             GUILayout.EndVertical();

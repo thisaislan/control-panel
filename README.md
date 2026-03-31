@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/thisaislan/control_panel">
+  <a href="https://github.com/thisaislan/control-panel">
     <img src="https://github.com/thisaislan/just-images/raw/main/images/control-panel/control_panel_logo_129x129.png">
   </a>
 </p>
@@ -13,7 +13,7 @@ Have you ever wished for a control panel where all these assets could be display
 
 That's exactly what the Control Panel delivers.
         <p align="center">
-          <a href="https://github.com/thisaislan/control_panel">
+          <a href="https://github.com/thisaislan/control-panel">
           <img src="https://github.com/thisaislan/just-images/raw/main/images/control-panel/control-panel-screenshot.png">
         </a>
       </p>
@@ -22,11 +22,11 @@ That's exactly what the Control Panel delivers.
 
 <p align="center">
     <a href="https://unity3d.com/get-unity/download">
-        <img src="https://img.shields.io/badge/unity-tools-blue" alt="Unity Download Link"></a>
+        <img src="https://img.shields.io/badge/Unity-2018.3%2B-blue" alt="Unity Version"></a>
     <a href="https://github.com/thisaislan/scriptables/blob/main/LICENSE.md">
         <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg" alt="License MIT"></a>
     <a href="https://chat.deepseek.com">
-        <img src="https://img.shields.io/badge/%F0%9F%92%AC-DeepSeek%20AI-blue" alt="License MIT"></a>
+        <img src="https://img.shields.io/badge/%F0%9F%92%AC-DeepSeek%20AI-blue" alt="DeepSeek AI"></a>
 </p>
 
 <h1></h1>
@@ -91,6 +91,8 @@ That's exactly what the Control Panel delivers.
 
 ## 📦 Install
 
+> **Requirements:** Unity 2018.3 or newer
+
 1. Copying git url https://github.com/thisaislan/control-panel.git
 
 2. Click on `Window/Package Manager` in Unity Editor
@@ -139,7 +141,7 @@ Copyright (c) 2026-present Aislan Tavares (@thisaislan) and Contributors. Script
 <br>
 
 <h4 align="center" style="text-align:center;">
-  <a href="https://github.com/thisaislan/control_panel">
+  <a href="https://github.com/thisaislan/control-panel">
     <img src="https://github.com/thisaislan/just-images/raw/main/images/control-panel/control_panel_logo_32x32.png" style="width: 32px">    
   </a>
 

@@ -1,6 +1,7 @@
 {
     "name": "thisaislan.control-panel",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "unity": "2018.3",
     "displayName": "Control panel",
     "description": "A powerful Unity Editor tool for creating, organizing, and managing custom control panel using ScriptableObjects across multiple tabs with intuitive drag-and-drop functionality.",
     "documentationUrl": "https://github.com/thisaislan/control-panel",

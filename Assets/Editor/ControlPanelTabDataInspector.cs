@@ -12,13 +12,16 @@ namespace Thisaislan.ControlPanel.Editor
     internal class ControlPanelTabDataInspector : UnityEditor.Editor
     {
         private const string TabNameLabel = "Tab Name";
+        private const string TabNamePropertyName = "TabName";
+        private const string DescriptionPropertyName = "Description";
+        private const string ScriptableObjectGuidsPropertyName = "ScriptableObjectGuids";
+        
         private const string DescriptionLabel = "Description";
         private const string ScriptableObjectsLabel = "Scriptable Objects";
         private const string NoItemsMessage = "No Scriptable Objects added to this tab.";
         private const string TotalItemsLabel = "Total items: ";
         private const string SelectButtonLabel = "Select";
         
-        private const int TopSpacing = 4;
         private const int SectionSpacing = 8;
         private const int ItemSpacing = 6;
         private const int DescriptionMinHeight = 40;
@@ -43,9 +46,9 @@ namespace Thisaislan.ControlPanel.Editor
                 return;
             }
 
-            tabNameProp = serializedObject.FindProperty("TabName");
-            descriptionProp = serializedObject.FindProperty("Description");
-            scriptableObjectGuidsProp = serializedObject.FindProperty("ScriptableObjectGuids");
+            tabNameProp = serializedObject.FindProperty(TabNamePropertyName);
+            descriptionProp = serializedObject.FindProperty(DescriptionPropertyName);
+            scriptableObjectGuidsProp = serializedObject.FindProperty(ScriptableObjectGuidsPropertyName);
 
             CleanupInvalidEntries();
         }
@@ -89,7 +92,6 @@ namespace Thisaislan.ControlPanel.Editor
 
         private void DrawTabNameSection()
         {
-            EditorGUILayout.Space(TopSpacing);
             EditorGUILayout.LabelField(TabNameLabel, EditorStyles.boldLabel);
             EditorGUILayout.SelectableLabel(
                 tabNameProp.stringValue, 
