@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.0.2:
+- Allow check if is there any tab files at OnBecameVisible
+
 #### v1.0.1:
 - Clean up the code
 

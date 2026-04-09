@@ -133,6 +133,14 @@ namespace Thisaislan.ControlPanel.Editor
             catch { }
         }
 
+        private void OnBecameVisible()
+        {
+            if (tabs.Count == 0)
+            {
+                InitializeData();
+            }
+        }
+
         private void OnGUI()
         {
             DrawTabsBar();
