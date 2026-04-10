@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.0.3:
+- Allow check if styles was initialized at OnBecameVisible
+- Select button always visible in the screen
+
 #### v1.0.2:
 - Allow check if is there any tab files at OnBecameVisible
 

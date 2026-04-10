@@ -48,7 +48,6 @@ namespace Thisaislan.ControlPanel.Editor
         private const string AlreadyExistNameErrorMessage = "A tab named '{0}' already exists.";
         private const string ScriptableObjectAlreadyAddedMessage = "Scriptable Object '{0}' already added.";
         private const string RemoveScriptableObjectMessage = "Are you sure you want to remove that Scriptable Object from this tab? This action cannot be undone.";
-        private const string PrefixDisplayName = "...";
         private const float MinSplitterPosition = 0.2f;
         private const float MaxSplitterPosition = 0.8f;
         private const int DefaultTabHeight = 18;
@@ -62,11 +61,12 @@ namespace Thisaislan.ControlPanel.Editor
         private const int SettingsButtonSize = 32;
         private const int SelectButtonSize = 28;
         private const int PathSelectorHeight = 32;
-        private const int PathSelectorIconHeight = 26;
         private const int DropZoneHeight = 40;
         private const int AddButtonHeight = 32;
-        private const int MaxPathDisplayLength = 100;
-        private const int PathTruncateOffset = 97;
+        private const float PathButtonSpace = 4f;
+        private const float SelectButtonYExtraSpace = 2f;
+        private const float XWindowsMinSize = 1000f;
+        private const float YWindowsMinSize = 800f;
 
         [MenuItem(MenuItemName, priority = 0)]
         internal static void OpenWindow()
@@ -120,24 +120,28 @@ namespace Thisaislan.ControlPanel.Editor
         private GUIStyle helpBoxCenteredStyle;
         private GUIContent dragIcon;
 
-        //  Lifecycle 
-        private void OnEnable()
-        {
-            // Avoid domain load errors
-            try
-            {
-                InitializeStyles();
-                InitializeData();
-                SetMinWindowSize();
-            }
-            catch { }
-        }
-
         private void OnBecameVisible()
         {
-            if (tabs.Count == 0)
+            try
             {
-                InitializeData();
+                if (tabButtonStyle == null)
+                {
+                    InitializeStyles();
+                }
+
+                if (tabs.Count == 0)
+                {
+                    InitializeData();
+                }
+
+                if (minSize.x != XWindowsMinSize || minSize.y != YWindowsMinSize)
+                {
+                    SetMinWindowSize();
+                }
+            }
+            catch
+            {
+                // Silent error
             }
         }
 
@@ -244,7 +248,7 @@ namespace Thisaislan.ControlPanel.Editor
 
         private void SetMinWindowSize()
         {
-            minSize = new Vector2(1000, 800);
+            minSize = new Vector2(XWindowsMinSize, YWindowsMinSize);
         }
 
         private void UpdateSelectedTabDescription()
@@ -788,38 +792,154 @@ namespace Thisaislan.ControlPanel.Editor
                 return;
             }
 
-            string displayPath = FormatPath(path);
-            ScriptableObject obj = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
-
             EditorGUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Height(PathSelectorHeight));
 
+            ScriptableObject obj = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
+
+            Rect rowRect = EditorGUILayout.GetControlRect(false, PathSelectorHeight, EditorStyles.helpBox);
+
+            // --- Layout rects ---
+            Rect iconRect = new Rect(rowRect.x, rowRect.y, IconSize, rowRect.height);
+
+            Rect buttonRect = new Rect(
+                rowRect.xMax - SelectButtonSize,
+                rowRect.y + SelectButtonYExtraSpace,
+                SelectButtonSize,
+                SelectButtonSize
+            );
+
+            float textStartX = iconRect.xMax + PathButtonSpace;
+            float textEndX = buttonRect.x - PathButtonSpace;
+
+            float textWidth = Mathf.Max(0, textEndX - textStartX);
+
+            Rect textRect = new Rect(
+                textStartX,
+                rowRect.y,
+                textWidth,
+                rowRect.height
+            );
+
+            // --- Draw ---
             Texture icon = AssetPreview.GetMiniThumbnail(obj);
-            GUILayout.Label(icon, GUILayout.Width(IconSize), GUILayout.Height(PathSelectorIconHeight));
-            GUILayout.Label(displayPath, EditorStyles.label, GUILayout.Height(PathSelectorIconHeight), GUILayout.ExpandWidth(true));
+            GUI.Label(iconRect, icon);
+
+            string displayPath = FormatPath(path, textWidth, EditorStyles.label);
+
+            GUI.Label(textRect, displayPath, EditorStyles.label);
 
             GUIContent selectButtonContent = new GUIContent(EditorGUIUtility.IconContent(SelectIconName))
             {
                 tooltip = SelectFileButtonTooltip
             };
 
-            if (GUILayout.Button(selectButtonContent, GUILayout.Width(SelectButtonSize), GUILayout.Height(SelectButtonSize)))
+            if (GUI.Button(buttonRect, selectButtonContent))
             {
                 Selection.activeObject = obj;
                 EditorGUIUtility.PingObject(obj);
             }
 
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.Space(1);
+            EditorGUILayout.Space(2);
         }
 
-        private string FormatPath(string path)
+        private string FormatPath(string path, float maxWidth, GUIStyle style)
         {
-            if (path.Length <= MaxPathDisplayLength)
+            if (string.IsNullOrEmpty(path))
+            {
+                return string.Empty;
+            }
+
+            // If it already fits, return as-is
+            if (style.CalcSize(new GUIContent(path)).x <= maxWidth)
             {
                 return path;
             }
 
-            return PrefixDisplayName + path.Substring(path.Length - PathTruncateOffset);
+            string fileName = System.IO.Path.GetFileName(path);
+            string directory = System.IO.Path.GetDirectoryName(path)?.Replace("\\", "/") ?? "";
+
+            if (string.IsNullOrEmpty(directory))
+            {
+                return fileName;
+            }
+
+            string ellipsis = ".../";
+
+            // If even ".../filename" doesn't fit, fallback hard
+            string minimal = ellipsis + fileName;
+            if (style.CalcSize(new GUIContent(minimal)).x > maxWidth)
+            {
+                return fileName;
+            }
+
+            // Start trimming the middle
+            string[] parts = directory.Split('/');
+            int left = 0;
+            int right = parts.Length - 1;
+
+            string leftPart = "";
+            string rightPart = "";
+
+            while (left <= right)
+            {
+                if (leftPart.Length <= rightPart.Length)
+                {
+                    if (leftPart.Length == 0)
+                    {
+                        leftPart = parts[left];
+                    }
+                    else
+                    {
+                        leftPart += "/" + parts[left];
+                    }
+
+                    left++;
+                }
+                else
+                {
+                    if (rightPart.Length == 0)
+                   { 
+                        rightPart = parts[right];
+                   }
+                    else
+                    {
+                        rightPart = parts[right] + "/" + rightPart;
+                    }
+
+                    right--;
+                }
+
+                string candidate = $"{leftPart}/{ellipsis}{rightPart}/{fileName}".Replace("//", "/");
+
+                if (style.CalcSize(new GUIContent(candidate)).x > maxWidth)
+                {
+                    // rollback last add
+                    if (leftPart.Length > rightPart.Length)
+                    {
+                        left--;
+                    }
+                    else
+                    {
+                        right++;
+                    }
+
+                    break;
+                }
+            }
+
+            string finalPath;
+
+            if (!string.IsNullOrEmpty(rightPart))
+            {
+                finalPath = $"{leftPart}/{ellipsis}{rightPart}/{fileName}";
+            }
+            else
+            {
+                finalPath = $"{leftPart}/{ellipsis}{fileName}";
+            }
+
+            return finalPath.Replace("//", "/");
         }
 
         //  Inline Tab Editor 
