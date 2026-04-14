@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.0.4:
+- Allow edit multiple objects inspector
+- Add lazy style initialization
+
 #### v1.0.3:
 - Allow check if styles was initialized at OnBecameVisible
 - Select button always visible in the screen

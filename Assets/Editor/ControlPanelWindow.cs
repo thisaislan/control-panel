@@ -112,7 +112,7 @@ namespace Thisaislan.ControlPanel.Editor
         private GUIStyle tabButtonStyle;
         private GUIStyle tabSelectedStyle;
         private GUIStyle tabTooltipStyle;
-        private GUIStyle tapDescriptionStyle;
+        private GUIStyle tabDescriptionStyle;
         private GUIStyle welcomeMessageStyle;
         private GUIStyle selectedRowStyle;
         private GUIStyle nonSelectedNameRowStyle;
@@ -120,15 +120,152 @@ namespace Thisaislan.ControlPanel.Editor
         private GUIStyle helpBoxCenteredStyle;
         private GUIContent dragIcon;
 
+        private GUIStyle TabButtonStyle
+        {
+            get
+            {
+                if (tabButtonStyle == null)
+                {
+                    tabButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
+                    tabButtonStyle.alignment = TextAnchor.MiddleCenter;
+                    tabButtonStyle.fontStyle = FontStyle.Normal;
+                }
+
+                return tabButtonStyle;
+            }
+        }
+
+        private GUIStyle TabSelectedStyle
+        {
+            get
+            {
+                if (tabSelectedStyle == null)
+                {
+                    Texture2D selectedRowTexture = CreateSolidColorTexture(new Color(0.18f, 0.18f, 0.18f));
+
+                    tabSelectedStyle = new GUIStyle(TabButtonStyle);
+                    tabSelectedStyle.normal.background = selectedRowTexture;
+                    tabSelectedStyle.fontStyle = FontStyle.Bold;
+                    tabSelectedStyle.fontSize = 13;
+                }
+
+                return tabSelectedStyle;
+            }
+        }
+
+        private GUIStyle TabTooltipStyle
+        {
+            get
+            {
+                if (tabTooltipStyle == null)
+                {
+                    tabTooltipStyle = new GUIStyle(EditorStyles.helpBox);
+                    tabTooltipStyle.fontSize = 11;
+                    tabTooltipStyle.alignment = TextAnchor.MiddleLeft;
+                    tabTooltipStyle.wordWrap = true;
+                }
+
+                return tabTooltipStyle;
+            }
+        }
+
+        private GUIStyle TabDescriptionStyle
+        {
+            get
+            {
+                if (tabDescriptionStyle == null)
+                {
+                    tabDescriptionStyle = new GUIStyle(EditorStyles.whiteBoldLabel);
+                    tabDescriptionStyle.wordWrap = true;
+                    tabDescriptionStyle.fontStyle = FontStyle.Italic;
+                }
+
+                return tabDescriptionStyle;
+            }
+        }
+
+        private GUIStyle SelectedRowStyle
+        {
+            get
+            {
+                if (selectedRowStyle == null)
+                {
+                    Texture2D selectedRowTexture = CreateSolidColorTexture(new Color(0.18f, 0.18f, 0.18f));
+
+                    selectedRowStyle = new GUIStyle(EditorStyles.helpBox);
+                    selectedRowStyle.normal.background = selectedRowTexture;
+                }
+
+                return selectedRowStyle;
+            }
+        }
+
+        private GUIStyle NonSelectedNameRowStyle
+        {
+            get
+            {
+                if (nonSelectedNameRowStyle == null)
+                {
+                    nonSelectedNameRowStyle = new GUIStyle(EditorStyles.label);
+                    nonSelectedNameRowStyle.margin = new RectOffset(0, 0, 4, 0);
+                    nonSelectedNameRowStyle.padding = new RectOffset(0, 0, 0, 0);
+                    nonSelectedNameRowStyle.alignment = TextAnchor.MiddleLeft;
+                    nonSelectedNameRowStyle.stretchWidth = true;
+                    nonSelectedNameRowStyle.fontStyle = FontStyle.Normal;
+                }
+
+                return nonSelectedNameRowStyle;
+            }
+        }
+
+        private GUIStyle SelectedNameRowStyle
+        {
+            get
+            {
+                if (selectedNameRowStyle == null)
+                {
+                    selectedNameRowStyle = new GUIStyle(NonSelectedNameRowStyle);
+                    selectedNameRowStyle.fontStyle = FontStyle.Bold;
+                    selectedNameRowStyle.fontSize = 13;
+                }
+
+                return selectedNameRowStyle;
+            }
+        }
+
+        private GUIStyle HelpBoxCenteredStyle
+        {
+            get
+            {
+                if (helpBoxCenteredStyle == null)
+                {
+                    helpBoxCenteredStyle = new GUIStyle(EditorStyles.helpBox);
+                    helpBoxCenteredStyle.alignment = TextAnchor.MiddleCenter;
+                    helpBoxCenteredStyle.fontStyle = FontStyle.Italic;
+                    helpBoxCenteredStyle.fontSize = 11;
+                }
+
+                return helpBoxCenteredStyle;
+            }
+        }
+
+        private GUIContent DragIcon
+        {
+            get
+            {
+                if (dragIcon == null)
+                {
+                    dragIcon = EditorGUIUtility.IconContent(DragIconName);
+                }
+
+                return dragIcon;
+            }
+        }
+
         private void OnBecameVisible()
         {
             try
             {
-                if (tabButtonStyle == null)
-                {
-                    InitializeStyles();
-                }
-
                 if (tabs.Count == 0)
                 {
                     InitializeData();
@@ -166,66 +303,6 @@ namespace Thisaislan.ControlPanel.Editor
 
             // Inline tab editor at the bottom
             DrawInlineTabEditor();
-        }
-
-        //  Initialization 
-        private void InitializeStyles()
-        {
-            Texture2D selectedRowTexture = CreateSolidColorTexture(new Color(0.18f, 0.18f, 0.18f));
-            dragIcon = EditorGUIUtility.IconContent(DragIconName);
-
-            tabButtonStyle = new GUIStyle(EditorStyles.toolbarButton)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontStyle = FontStyle.Normal
-            };
-
-            tabSelectedStyle = new GUIStyle(tabButtonStyle)
-            {
-                normal = { background = selectedRowTexture },
-                fontStyle = FontStyle.Bold,
-                fontSize = 13
-            };
-
-            tabTooltipStyle = new GUIStyle(EditorStyles.helpBox)
-            {
-                fontSize = 11,
-                alignment = TextAnchor.MiddleLeft,
-                wordWrap = true
-            };
-
-            tapDescriptionStyle = new GUIStyle(EditorStyles.whiteBoldLabel)
-            {
-                wordWrap = true,
-                fontStyle = FontStyle.Italic
-            };
-
-            selectedRowStyle = new GUIStyle(EditorStyles.helpBox)
-            {
-                normal = { background = selectedRowTexture }
-            };
-
-            nonSelectedNameRowStyle = new GUIStyle(EditorStyles.label)
-            {
-                margin = new RectOffset(0, 0, 4, 0),
-                padding = new RectOffset(0, 0, 0, 0),
-                alignment = TextAnchor.MiddleLeft,
-                stretchWidth = true,
-                fontStyle = FontStyle.Normal
-            };
-
-            selectedNameRowStyle = new GUIStyle(nonSelectedNameRowStyle)
-            {
-                fontStyle = FontStyle.Bold,
-                fontSize = 13
-            };
-
-            helpBoxCenteredStyle = new GUIStyle(EditorStyles.helpBox)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontStyle = FontStyle.Italic,
-                fontSize = 11
-            };
         }
 
         private Texture2D CreateSolidColorTexture(Color color)
@@ -341,7 +418,7 @@ namespace Thisaislan.ControlPanel.Editor
             for (int i = 0; i < tabs.Count; i++)
             {
                 ControlPanelTabData tab = tabs[i];
-                GUIStyle style = (i == selectedTab) ? tabSelectedStyle : tabButtonStyle;
+                GUIStyle style = (i == selectedTab) ? TabSelectedStyle : TabButtonStyle;
                 Rect tabRect = GUILayoutUtility.GetRect(new GUIContent(tab.TabName), style, GUILayout.Height(DefaultTabHeight), GUILayout.MinWidth(DefaultTabMinWidth));
 
                 if (GUI.Button(tabRect, tab.TabName, style))
@@ -388,7 +465,7 @@ namespace Thisaislan.ControlPanel.Editor
         private void DrawDescriptionArea()
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-            GUILayout.Label(selectedTabDescription, tapDescriptionStyle);
+            GUILayout.Label(selectedTabDescription, TabDescriptionStyle);
 
             GUIContent settingsButtonContent = new GUIContent(EditorGUIUtility.IconContent(SettingsIconName))
             {
@@ -486,7 +563,7 @@ namespace Thisaislan.ControlPanel.Editor
         {
             if (index == selectedScriptableIndex)
             {
-                return EditorGUILayout.BeginHorizontal(selectedRowStyle, GUILayout.ExpandWidth(true));
+                return EditorGUILayout.BeginHorizontal(SelectedRowStyle, GUILayout.ExpandWidth(true));
             }
 
             return EditorGUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.ExpandWidth(true));
@@ -494,7 +571,7 @@ namespace Thisaislan.ControlPanel.Editor
 
         private void DrawDragHandle()
         {
-            GUILayout.Label(dragIcon, GUILayout.Width(DragHandleSize), GUILayout.Height(DragHandleSize));
+            GUILayout.Label(DragIcon, GUILayout.Width(DragHandleSize), GUILayout.Height(DragHandleSize));
         }
 
         private void DrawIcon(ScriptableObject obj)
@@ -505,7 +582,7 @@ namespace Thisaislan.ControlPanel.Editor
 
         private void DrawScriptableObjectName(ControlPanelTabData tab, int index, ScriptableObject obj)
         {
-            GUIStyle nameStyle = (selectedScriptableIndex == index) ? selectedNameRowStyle : nonSelectedNameRowStyle;
+            GUIStyle nameStyle = (selectedScriptableIndex == index) ? SelectedNameRowStyle : NonSelectedNameRowStyle;
             EditorGUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
 
             if (GUILayout.Button(obj.name, nameStyle, GUILayout.ExpandWidth(true)))
@@ -568,7 +645,7 @@ namespace Thisaislan.ControlPanel.Editor
         private void DrawDropZone(ControlPanelTabData tab)
         {
             Rect dropRect = GUILayoutUtility.GetRect(200, DropZoneHeight, GUILayout.ExpandWidth(true));
-            GUI.Box(dropRect, DropScriptableObjectsLabel, helpBoxCenteredStyle);
+            GUI.Box(dropRect, DropScriptableObjectsLabel, HelpBoxCenteredStyle);
 
             if (!dropRect.Contains(Event.current.mousePosition))
             {
