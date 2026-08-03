@@ -23,7 +23,7 @@ That's exactly what the Control Panel delivers.
 <p align="center">
     <a href="https://unity3d.com/get-unity/download">
         <img src="https://img.shields.io/badge/Unity-2018.3%2B-blue" alt="Unity Version"></a>
-    <a href="https://github.com/thisaislan/scriptables/blob/main/LICENSE.md">
+    <a href="https://github.com/thisaislan/control-panel/blob/main/LICENSE.md">
         <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg" alt="License MIT"></a>
     <a href="https://chat.deepseek.com">
         <img src="https://img.shields.io/badge/%F0%9F%92%AC-DeepSeek%20AI-blue" alt="DeepSeek AI"></a>
@@ -120,7 +120,7 @@ My friends and family, and you for having come here!
 </br>
 
 ## 📄 License
-Copyright (c) 2026-present Aislan Tavares (@thisaislan) and Contributors. Scriptables is free and open-source software licensed under the [MIT License](https://github.com/thisaislan/control-panel/blob/main/LICENSE.md).
+Copyright (c) 2026-present Aislan Tavares (@thisaislan) and Contributors. This is free and open-source software licensed under the [MIT License](https://github.com/thisaislan/control-panel/blob/main/LICENSE.md).
 
 
 <!--

@@ -49,6 +49,8 @@ namespace Thisaislan.ControlPanel.Editor
 
         public override void OnInspectorGUI()
         {
+            ValidateFoldoutStyle();
+
             if (targets.Length > 1)
             {
                 DrawMultiObjectInspector();
@@ -56,6 +58,14 @@ namespace Thisaislan.ControlPanel.Editor
             else
             {
                 DrawSingleInspector(serializedObject);
+            }
+        }
+
+        private void ValidateFoldoutStyle()
+        {
+            if (foldoutStyle != null && foldoutStyle.normal.background != EditorStyles.foldout.normal.background)
+            {
+                foldoutStyle = null;
             }
         }
 

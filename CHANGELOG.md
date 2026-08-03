@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.0.5:
+- Fix styles disappearing after Mac display sleep or lid close (rebuild style cache when GUI skin reloads)
+
 #### v1.0.4:
 - Allow edit multiple objects inspector
 - Add lazy style initialization

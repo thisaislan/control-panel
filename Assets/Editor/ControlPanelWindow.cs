@@ -284,6 +284,8 @@ namespace Thisaislan.ControlPanel.Editor
 
         private void OnGUI()
         {
+            ValidateStyleCache();
+
             DrawTabsBar();
 
             if (tabs.Count == 0)
@@ -311,6 +313,75 @@ namespace Thisaislan.ControlPanel.Editor
             texture.SetPixel(0, 0, color);
             texture.Apply();
             return texture;
+        }
+
+        private void ValidateStyleCache()
+        {
+            if (IsStyleCacheValid())
+            {
+                return;
+            }
+
+            InvalidateStyleCache();
+        }
+
+        private bool IsStyleCacheValid()
+        {
+            if (tabButtonStyle != null && tabButtonStyle.normal.background != EditorStyles.toolbarButton.normal.background)
+            {
+                return false;
+            }
+
+            if (tabTooltipStyle != null && tabTooltipStyle.normal.background != EditorStyles.helpBox.normal.background)
+            {
+                return false;
+            }
+
+            if (helpBoxCenteredStyle != null && helpBoxCenteredStyle.normal.background != EditorStyles.helpBox.normal.background)
+            {
+                return false;
+            }
+
+            if (tabSelectedStyle != null && !IsTextureValid(tabSelectedStyle.normal.background))
+            {
+                return false;
+            }
+
+            if (selectedRowStyle != null && !IsTextureValid(selectedRowStyle.normal.background))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsTextureValid(Texture2D texture)
+        {
+            return texture != null;
+        }
+
+        private void InvalidateStyleCache()
+        {
+            if (tabSelectedStyle != null && tabSelectedStyle.normal.background != null)
+            {
+                DestroyImmediate(tabSelectedStyle.normal.background);
+            }
+
+            if (selectedRowStyle != null && selectedRowStyle.normal.background != null)
+            {
+                DestroyImmediate(selectedRowStyle.normal.background);
+            }
+
+            tabButtonStyle = null;
+            tabSelectedStyle = null;
+            tabTooltipStyle = null;
+            tabDescriptionStyle = null;
+            welcomeMessageStyle = null;
+            selectedRowStyle = null;
+            nonSelectedNameRowStyle = null;
+            selectedNameRowStyle = null;
+            helpBoxCenteredStyle = null;
+            dragIcon = null;
         }
 
         private void InitializeData()
@@ -386,23 +457,31 @@ namespace Thisaislan.ControlPanel.Editor
             EditorGUILayout.EndHorizontal();
         }
 
+        private GUIStyle WelcomeMessageStyle
+        {
+            get
+            {
+                if (welcomeMessageStyle == null)
+                {
+                    welcomeMessageStyle = new GUIStyle(EditorStyles.boldLabel)
+                    {
+                        alignment = TextAnchor.MiddleCenter,
+                        fontSize = 16,
+                        fontStyle = FontStyle.Bold,
+                        wordWrap = true
+                    };
+                }
+
+                return welcomeMessageStyle;
+            }
+        }
+
         private void ShowWelcomeMessage()
         {
-            if (welcomeMessageStyle == null)
-            {
-                welcomeMessageStyle = new GUIStyle(EditorStyles.boldLabel)
-                {
-                    alignment = TextAnchor.MiddleCenter,
-                    fontSize = 16,
-                    fontStyle = FontStyle.Bold,
-                    wordWrap = true
-                };
-            }
-
             GUILayout.FlexibleSpace();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            GUILayout.Label(WelcomeMessage, welcomeMessageStyle);
+            GUILayout.Label(WelcomeMessage, WelcomeMessageStyle);
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.FlexibleSpace();
